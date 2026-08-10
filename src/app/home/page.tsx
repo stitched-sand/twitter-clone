@@ -1,6 +1,19 @@
-import React from 'react'
+import React from "react";
+import CreatePost from "@/components/CreatePost";
 
 export default function Page() {
   return (
-<div></div>  )
+    <div>
+      <div className="border border-border h-14 grid grid-cols-2 text-white">
+        <button className="cursor-pointer font-semibold hover:bg-hover">
+          For You
+        </button>
+
+        <button className="cursor-pointer font-semibold hover:bg-hover">
+          For You
+        </button>
+      </div>
+      <CreatePost/>
+    </div>
+  );
 }
