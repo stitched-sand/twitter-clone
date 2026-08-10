@@ -6,18 +6,30 @@ import { FaRegFaceSmile } from "react-icons/fa6";
 import { IoLocationOutline } from "react-icons/io5";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
+import EmojiPicker, { EmojiClckData, Theme } from "emoji-picker-react";
 
 export default function CreatePost() {
   const [post, setPost] = useState("");
+  const [showPicker, setShowPicker] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const isDisabled = post.trim() === "";
+  const isDisabled = post.trim() === "" && !imagePreview;
   const fileref = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if(file){
         setImagePreview(URL.createObjectURL(file))
+        
     }
+  }
+
+  const removeImage = () => {
+    setImagePreview(null)
+    if(fileref.current) fileref.current.value = ""
+  }
+
+  const onEmojiClick = (emojidata : EmojiClickData) => {
+    setPost((prev) => prev + emojidata.emoji)
   }
 
   return (
@@ -44,7 +56,7 @@ export default function CreatePost() {
                 className="h-full w-full object-cover"
                 alt="preview-image"
             />
-            <button className="absolute top-5 right-5 bg-gray-600 w-10 h-10 text-2xl rounded-full opacity-50 cursor-pointer grid place-items-center">
+            <button className="absolute top-5 right-5 bg-gray-600 w-10 h-10 text-2xl rounded-full opacity-50 cursor-pointer grid place-items-center" onClick={removeImage}>
                 <RxCross2 />
             </button>
             </div>)}
@@ -56,7 +68,7 @@ export default function CreatePost() {
             >
               <TbPhoto size={20} />
             </div>
-            <div className="text-primary cursor-pointer">
+            <div className="text-primary cursor-pointer" onClick={() => setShowPicker(!showPicker)}>
               <FaRegFaceSmile size={20} />
             </div>
             <div className="text-primary cursor-pointer">
@@ -74,7 +86,18 @@ export default function CreatePost() {
             <button className="text-black bg-white py-2 px-5 font-semibold cursor-pointer rounded-full">
               Post
             </button>
+            
           )}
+          { showPicker && (<div className="fixed z-10 top-50 left-1/2 w-[90%] max-w-2xl -translate-x-1/2">
+          <EmojiPicker theme={Theme.DARK} 
+          onEmojiClick ={onEmojiClick}
+          style={{
+            width: "100%",
+            background: "black"
+          }}/>
+
+          </div>)}
+
         </div>
 <input
   type="file"
