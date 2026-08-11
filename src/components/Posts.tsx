@@ -26,8 +26,8 @@ export default function Posts() {
                 </div>
                 <BsThreeDots className="text-secondary-text"/>
             </div>
-            <Link href="#" className="text-white"></Link>
-            <Link href="#">
+            <Link href="/home/post/123" className="text-white"></Link>
+            <Link href="/home/post/125">
             <Image src="/images/post1.jpg" alt="post-image" width={1800} height={1800}
             className="h-70 md:h-130 w-full rounded-lg border border-border object-cover"/>
             </Link>
