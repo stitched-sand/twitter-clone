@@ -1,5 +1,6 @@
 import React from "react";
 import CreatePost from "@/components/CreatePost";
+import Posts from "@/components/Posts";
 
 export default function Page() {
   return (
@@ -14,6 +15,7 @@ export default function Page() {
         </button>
       </div>
       <CreatePost/>
+      <Posts/>
     </div>
   );
 }
