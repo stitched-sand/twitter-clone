@@ -1,4 +1,6 @@
+import Comments from "@/components/Comments";
 import GoBackButton from "@/components/GoBackButton";
+import ReplyPost from "@/components/ReplyPost";
 import Image from "next/image";
 import React from "react";
 import { BsThreeDots } from "react-icons/bs";
@@ -63,6 +65,8 @@ export default function Page() {
             </div>
         </div>
       </div>
+      <ReplyPost/>
+      <Comments/>
     </div>
   );
 }
