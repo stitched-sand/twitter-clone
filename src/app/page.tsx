@@ -1,7 +1,30 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { signInUser } from "../../services/auth";
 
 export default function Home() {
+const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const signin = async (e:React.FormEvent) => {
+    e.preventDefault();
+    if(!email.trim() || !password.trim()) {
+        setMessage("All fields are required!");
+        return;
+    }
+
+    const result = await signInUser(email, password);
+    if(result?.error){
+      setMessage(result.error);
+    } else{
+      setMessage("Login successful")
+    }
+
+  }
+
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="bg-background max-w-[300px] w-[95%] py-12 rounded-lg">
@@ -22,20 +45,34 @@ export default function Home() {
           <div className="flex-grow h-px bg-border border
           border-border"></div>
         </div>
-        <input
+        {message && (<p className="bg-primary py-1 mb-4 font-semibold text-center">
+          {message}
+        </p>)}
+        <form onSubmit = {signin}>
+          <input
+          value={email}
+          onChange = {(e) => setEmail(e.target.value)}
           type="text"
-          placeholder="Phone, Email or Username"
+          placeholder="Email"
           className="mb-6 w-full bg-background outline-none rounded-md p-4 placeholder-secondary-text border border-border text-white"
+        />
+        <input
+        value={password}
+        onChange= {(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="Password"
+          className="mb-4 w-full bg-background outline-none rounded-md p-4 placeholder-secondary-text border border-border text-white"
         />
         <button className="text-black w-full mt-8 rounded-full h-10 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-200 font-semibold bg-white">
           Continue
         </button>
+        </form>
         <button className="text-white w-full mt-8 rounded-full h-10 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-200 font-semibold border border-border hover:text-black">
           Forgot Password?
         </button>
         <div className="text-secondary-text mt-8">
           <span className="mr-1">Don&apos;t have an account?</span>
-          <Link href="#" className="text-primary">Sign up</Link>
+          <Link href="/auth/signup" className="text-primary">Sign up</Link>
         </div>
       </div>
     </div>

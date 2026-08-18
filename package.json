@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
     "emoji-picker": "^0.0.7",
     "emoji-picker-react": "^4.19.1",
     "icons": "^1.0.0",
