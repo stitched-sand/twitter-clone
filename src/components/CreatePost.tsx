@@ -34,6 +34,7 @@ export default function CreatePost() {
   };
 
   if (!session) return null;
+  if(!profile) return null;
   if (loading) return <h1 className="text-2xl text-white">Loading</h1>;
 
   return (

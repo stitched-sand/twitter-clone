@@ -8,6 +8,7 @@ export default function Profile() {
     const {session, loading, profile} = useGetUser();
 
     if(!session) return null;
+    if(!profile) return null;
     if(loading) return <h1 className="text-2xl text-white">Loading...</h1>
   return (
     <div className="mt-10 text-white flex justify-between items-center">

@@ -1,9 +1,10 @@
 "use client"
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signInUser } from "../../services/auth";
 import { useRouter } from "next/navigation";
+import { supabase } from "../../lib/SupabaseClient";
 
 export default function Home() {
 const [email, setEmail] = useState("");
@@ -29,6 +30,15 @@ const [email, setEmail] = useState("");
     }
 
   }
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({data:{session}}) => {
+      if(session) {
+        router.replace("/auth/callback");
+      }
+    }
+  )
+  }, []);
 
   return (
     <div className="h-screen flex items-center justify-center">
