@@ -3,11 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { signInUser } from "../../services/auth";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
 const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter()
 
   const signin = async (e:React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +23,9 @@ const [email, setEmail] = useState("");
       setMessage(result.error);
     } else{
       setMessage("Login successful")
+      setTimeout(() => {
+        router.replace("/auth/callback");
+      }, 2000);
     }
 
   }

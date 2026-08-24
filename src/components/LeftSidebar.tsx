@@ -7,6 +7,7 @@ import { GoHomeFill } from "react-icons/go";
 import { IoSearchOutline } from "react-icons/io5";
 import { TbDotsCircleHorizontal } from "react-icons/tb";
 import Profile from "./Profile";
+import LogoutButton from "./LogoutButton";
 
 export default function LeftSidebar() {
   return (
@@ -78,9 +79,7 @@ export default function LeftSidebar() {
           <span className="hidden lg:inline text-xl">More</span>
         </Link>
       </div>
-      <button className="hidden lg:block bg-white text-black p-3 w-full mt-3 font-bold rounded-full cursor-pointer">
-        Logout
-      </button>
+      <LogoutButton/>
       <button className="bg-primary p-3 rounded-full cursor-pointer text-white lg:hidden">
         <FaFeather size={20} />
       </button>

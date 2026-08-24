@@ -13,6 +13,7 @@ export default function Page() {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [user, setUser] = useState<null | User>(null);
+  const [isChecking, setIsChecking] = useState(true);
 
   const setupUserProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,12 +101,15 @@ export default function Page() {
 
       if (profile) {
         router.replace("/home");
+        return;
       }
+      setIsChecking(false);
     };
 
     handleAuth();
   }, [router]);
 
+  if(isChecking) return <h1 className="text-white text-xl">Checking Profile</h1>
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="bg-background max-w-[300px] w-[95%] py-12 rounded-lg">
