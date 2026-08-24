@@ -7,40 +7,46 @@ import { IoLocationOutline } from "react-icons/io5";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import EmojiPicker, { EmojiClckData, Theme } from "emoji-picker-react";
+import { useGetUser } from "../../custom-hooks/useGetUser";
 
 export default function CreatePost() {
   const [post, setPost] = useState("");
-  const [showPicker, setShowPicker] = useState(false)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [showPicker, setShowPicker] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const isDisabled = post.trim() === "" && !imagePreview;
   const fileref = useRef<HTMLInputElement | null>(null);
+  const { loading, session, profile } = useGetUser();
 
-  const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if(file){
-        setImagePreview(URL.createObjectURL(file))
-        
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
     }
-  }
+  };
 
   const removeImage = () => {
-    setImagePreview(null)
-    if(fileref.current) fileref.current.value = ""
-  }
+    setImagePreview(null);
+    if (fileref.current) fileref.current.value = "";
+  };
 
-  const onEmojiClick = (emojidata : EmojiClickData) => {
-    setPost((prev) => prev + emojidata.emoji)
-  }
+  const onEmojiClick = (emojidata: EmojiClickData) => {
+    setPost((prev) => prev + emojidata.emoji);
+  };
+
+  if (!session) return null;
+  if (loading) return <h1 className="text-2xl text-white">Loading</h1>;
 
   return (
     <div className="flex gap-4 p-4 border border-border">
-      <Image
-        src="/images/myprofile.jpg"
-        alt="profile-pic"
-        width={500}
-        height={500}
-        className="w-10 h-10 object-cover rounded-full shrink-0"
-      />
+      {profile?.avatar_url && (
+        <Image
+          src={profile.avatar_url}
+          alt="profile-pic"
+          width={500}
+          height={500}
+          className="w-10 h-10 object-cover rounded-full shrink-0"
+        />
+      )}
       <div className="w-full">
         <textarea
           value={post}
@@ -48,18 +54,23 @@ export default function CreatePost() {
           placeholder="what's happening?"
           className="w-full placeholder:text-secondary-text outline-none text-xl resize-none text-white"
         ></textarea>
-            { imagePreview && (<div className="h-60 md:h-100 rounded-lg overflow-hidden border border-border mb-10 relative">
+        {imagePreview && (
+          <div className="h-60 md:h-100 rounded-lg overflow-hidden border border-border mb-10 relative">
             <Image
-                src={imagePreview}
-                width={500}
-                height={500}
-                className="h-full w-full object-cover"
-                alt="preview-image"
+              src={imagePreview}
+              width={500}
+              height={500}
+              className="h-full w-full object-cover"
+              alt="preview-image"
             />
-            <button className="absolute top-5 right-5 bg-gray-600 w-10 h-10 text-2xl rounded-full opacity-50 cursor-pointer grid place-items-center" onClick={removeImage}>
-                <RxCross2 />
+            <button
+              className="absolute top-5 right-5 bg-gray-600 w-10 h-10 text-2xl rounded-full opacity-50 cursor-pointer grid place-items-center"
+              onClick={removeImage}
+            >
+              <RxCross2 />
             </button>
-            </div>)}
+          </div>
+        )}
         <div className="flex justify-between py-4 items-center border-t border-border">
           <div className="flex gap-3">
             <div
@@ -68,7 +79,10 @@ export default function CreatePost() {
             >
               <TbPhoto size={20} />
             </div>
-            <div className="text-primary cursor-pointer" onClick={() => setShowPicker(!showPicker)}>
+            <div
+              className="text-primary cursor-pointer"
+              onClick={() => setShowPicker(!showPicker)}
+            >
               <FaRegFaceSmile size={20} />
             </div>
             <div className="text-primary cursor-pointer">
@@ -86,29 +100,28 @@ export default function CreatePost() {
             <button className="text-black bg-white py-2 px-5 font-semibold cursor-pointer rounded-full">
               Post
             </button>
-            
           )}
-          { showPicker && (<div className="fixed z-10 top-50 left-1/2 w-[90%] max-w-2xl -translate-x-1/2">
-          <EmojiPicker theme={Theme.DARK} 
-          onEmojiClick ={onEmojiClick}
-          style={{
-            width: "100%",
-            background: "black"
-          }}/>
-
-          </div>)}
-
+          {showPicker && (
+            <div className="fixed z-10 top-50 left-1/2 w-[90%] max-w-2xl -translate-x-1/2">
+              <EmojiPicker
+                theme={Theme.DARK}
+                onEmojiClick={onEmojiClick}
+                style={{
+                  width: "100%",
+                  background: "black",
+                }}
+              />
+            </div>
+          )}
         </div>
-<input
-  type="file"
-  ref={fileref}
-  className="hidden"
-  accept="image/*"
-  onChange={handleFileChange}
-/>    
-
-</div>
-
- </div>
+        <input
+          type="file"
+          ref={fileref}
+          className="hidden"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </div>
+    </div>
   );
 }

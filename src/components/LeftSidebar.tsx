@@ -79,7 +79,7 @@ export default function LeftSidebar() {
         </Link>
       </div>
       <button className="hidden lg:block bg-white text-black p-3 w-full mt-3 font-bold rounded-full cursor-pointer">
-        Post
+        Logout
       </button>
       <button className="bg-primary p-3 rounded-full cursor-pointer text-white lg:hidden">
         <FaFeather size={20} />

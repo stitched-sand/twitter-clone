@@ -11,7 +11,8 @@ type Profile = {
 
 export const useGetUser = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { loading, session } = useUserSession();
+  const { session } = useUserSession();
+  const [loading, setLoading] = useState(true);
   const userId = session ? session.user.id : null;
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export const useGetUser = () => {
         } else {
             setProfile(data);
         }
+        setLoading(false);
     };
 
     fetchProfile()
