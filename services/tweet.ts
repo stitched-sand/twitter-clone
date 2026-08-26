@@ -45,3 +45,14 @@ export const createTweet = async (
 
   return true;
 };
+
+export const getTweets = async () => {
+    const{error, data} = await supabase.from("tweets").select(`*, profiles(id, username, name, avatar_url)`).order("created_at", {ascending:false})
+
+    if(error) {
+        console.log("fetchTweetsError:", error.message);
+
+    }
+
+    return data;
+}

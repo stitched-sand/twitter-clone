@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTweet } from "../services/tweet";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createTweet, getTweets } from "../services/tweet";
 
 export const usePostTweet = () => {
     const queryClient = useQueryClient();
@@ -18,3 +18,10 @@ export const usePostTweet = () => {
     }
   });
 };
+
+export const useGetTweets = () => {
+    return useQuery({
+        queryKey: ["tweets"],
+        queryFn: getTweets,
+    })
+}
