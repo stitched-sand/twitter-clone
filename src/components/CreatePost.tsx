@@ -8,37 +8,68 @@ import { RiCalendarScheduleLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import EmojiPicker, { EmojiClckData, Theme } from "emoji-picker-react";
 import { useGetUser } from "../../custom-hooks/useGetUser";
+import { usePostTweet } from "../../custom-hooks/useTweet";
 
 export default function CreatePost() {
   const [post, setPost] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [tweetImage, setTweetImage] = useState<null | File>();
   const isDisabled = post.trim() === "" && !imagePreview;
   const fileref = useRef<HTMLInputElement | null>(null);
   const { loading, session, profile } = useGetUser();
+  const {mutate, isPending} = usePostTweet()
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImagePreview(URL.createObjectURL(file));
+      setTweetImage(file);
     }
   };
 
   const removeImage = () => {
     setImagePreview(null);
     if (fileref.current) fileref.current.value = "";
+    setTweetImage(null);
   };
 
   const onEmojiClick = (emojidata: EmojiClickData) => {
     setPost((prev) => prev + emojidata.emoji);
   };
 
+  const PostTweet = () => {
+  if (!post.trim() && !tweetImage) {
+    return;
+  }
+
+  if (!session?.user.id) return;
+
+  mutate(
+    {
+      userId: session.user.id,
+      content: post || null,
+      tweetImage: tweetImage || null,
+    },
+    {
+      onSuccess: () => {
+        setPost("");
+        setImagePreview(null);
+        setTweetImage(null);
+      },
+      onError: (error) => {
+        console.log("Failed to post tweet", error.message);
+      },
+    }
+  );
+};
+
   if (!session) return null;
   if(!profile) return null;
   if (loading) return <h1 className="text-2xl text-white">Loading</h1>;
 
   return (
-    <div className="flex gap-4 p-4 border border-border">
+    <div className= {`flex gap-4 p-4 border border-border ${isPending ? "opacity-30" : ""}`}>
       {profile?.avatar_url && (
         <Image
           src={profile.avatar_url}
@@ -98,7 +129,7 @@ export default function CreatePost() {
               Post
             </button>
           ) : (
-            <button className="text-black bg-white py-2 px-5 font-semibold cursor-pointer rounded-full">
+            <button onClick= {PostTweet} className="text-black bg-white py-2 px-5 font-semibold cursor-pointer rounded-full">
               Post
             </button>
           )}
