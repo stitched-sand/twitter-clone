@@ -8,6 +8,7 @@ import { useGetTweets } from "../../custom-hooks/useTweet";
 import { Tweet } from "../../types/types";
 import moment from "moment";
 import { SpinnerCircularFixed } from "spinners-react";
+import TweetActions from "./TweetActions";
 
 export default function Posts() {
   const { isLoading, isError, error, data: tweets } = useGetTweets();
@@ -79,6 +80,12 @@ export default function Posts() {
                   />
                 </Link>
               )}
+              <TweetActions
+                creatorId={tweet.profiles.id}
+                tweetId={tweet.id}
+                imagePath={tweet.image_Path}
+                isTweetPostViewPage={false}
+              />
             </div>
           </div>
         );

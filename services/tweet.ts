@@ -47,12 +47,41 @@ export const createTweet = async (
 };
 
 export const getTweets = async () => {
-    const{error, data} = await supabase.from("tweets").select(`*, profiles(id, username, name, avatar_url)`).order("created_at", {ascending:false})
+  const { error, data } = await supabase
+    .from("tweets")
+    .select(`*, profiles(id, username, name, avatar_url)`)
+    .order("created_at", { ascending: false });
 
-    if(error) {
-        console.log("fetchTweetsError:", error.message);
+  if (error) {
+    console.log("fetchTweetsError:", error.message);
+  }
 
+  return data;
+};
+
+export const deleteTweet = async (tweetId: string, imagePath?: string) => {
+  // Delete the tweet record
+  const { error: deleteError } = await supabase
+    .from("tweets")
+    .delete()
+    .eq("id", tweetId);
+
+  if (deleteError) {
+    console.log("DeleteTweetError:", deleteError.message);
+    return;
+  }
+
+  // Delete the image from storage if the tweet has one
+  if (imagePath) {
+    const { error: imageError } = await supabase.storage
+      .from("tweet-images")
+      .remove([imagePath]);
+
+    if (imageError) {
+      console.log("ImageDeleteError:", imageError.message);
+      return;
     }
+  }
 
-    return data;
-}
+  return true;
+};

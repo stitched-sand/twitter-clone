@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createTweet, getTweets } from "../services/tweet";
+import { createTweet, deleteTweet, getTweets } from "../services/tweet";
 
 export const usePostTweet = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       userId,
@@ -13,15 +13,32 @@ export const usePostTweet = () => {
       content: string;
       tweetImage: File | null;
     }) => createTweet(userId, content, tweetImage),
-    onSuccess:() => {
-        queryClient.invalidateQueries({queryKey:["tweets"]})
-    }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tweets"] });
+    },
   });
 };
 
 export const useGetTweets = () => {
-    return useQuery({
-        queryKey: ["tweets"],
-        queryFn: getTweets,
-    })
-}
+  return useQuery({
+    queryKey: ["tweets"],
+    queryFn: getTweets,
+  });
+};
+
+export const useDeleteTweets = () => {
+    const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      tweetId,
+      imagePath,
+    }: {
+      tweetId: string;
+      imagePath?: string;
+    }) => deleteTweet(tweetId, imagePath),
+    onSuccess: () => {
+        queryClient.invalidateQueries({queryKey:["tweets"]})
+    }
+  });
+};
