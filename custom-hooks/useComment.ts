@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createComment, getComments } from "../services/comments";
+import {
+  createComment,
+  deleteComment,
+  getComments,
+} from "../services/comments";
 
 export const useCreateComment = () => {
   const queryClient = useQueryClient();
@@ -26,5 +30,24 @@ export const useGetComments = (tweetId: string) => {
     queryFn: () => getComments(tweetId),
     queryKey: ["comments", tweetId],
     enabled: !!tweetId,
+  });
+};
+
+export const useDeleteComment = () => {
+    const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      tweetId,
+      commentId,
+    }: {
+      tweetId: string;
+      commentId: string;
+    }) => deleteComment(commentId),
+    onSuccess: (data, variables) => {
+        queryClient.invalidateQueries({
+        queryKey: ["comments", variables.tweetId],
+      });
+    }
   });
 };

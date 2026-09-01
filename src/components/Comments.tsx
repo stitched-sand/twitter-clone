@@ -1,63 +1,66 @@
-"use client"
-import Image from 'next/image'
-import React from 'react'
-import { BsThreeDots } from 'react-icons/bs'
-import { FaRegBookmark, FaRegComment, FaRegHeart } from 'react-icons/fa6'
-import { FiRepeat } from 'react-icons/fi'
-import { IoIosStats } from 'react-icons/io'
-import { useGetComments } from '../../custom-hooks/useComment'
+"use client";
+import Image from "next/image";
+import React from "react";
+import { BsThreeDots } from "react-icons/bs";
+import { FaRegBookmark, FaRegComment, FaRegHeart } from "react-icons/fa6";
+import { FiRepeat } from "react-icons/fi";
+import { IoIosStats } from "react-icons/io";
+import { useGetComments } from "../../custom-hooks/useComment";
+import moment from "moment";
+import CommentActions from "./CommentActions";
 
-export default function Comments({tweetId}: {tweetId:string}) {
-    const {error, isError, isLoading, data:comments} = useGetComments(tweetId)
+export default function Comments({ tweetId }: { tweetId: string }) {
+  const { error, isError, isLoading, data: comments } = useGetComments(tweetId);
 
-    if(isLoading) return <h1 className="text-white text-2xl">Loading...</h1>
-    if(isError) return <h1 className="text-white text-2xl">{error.message}</h1>
+  if (isLoading) return <h1 className="text-white text-2xl">Loading...</h1>;
+  if (isError) return <h1 className="text-white text-2xl">{error.message}</h1>;
 
   return (
     <div>
-      {comments?.map((comment:Comment) => {
+      {comments?.map((comment: Comment) => {
         return (
-            <div key={comment.id} className="px-4 py- flex gap-3 border-b border-border">
-              
-              <div className = "w-full">
-                  <div className="flex justify-between gap-1 text-sm">
-                      <div className = "flex gap-1 items-center text-sm">
-                          <span className="text-white font-bold">Zara Anaya Patel</span>
-                          <span className="text-secondary-text">@zara</span>
-                          <span className="text-secondary-text">4h</span>
-                      </div>
-                      <BsThreeDots className="text-secondary-text"/>
-                  </div>
-                  <div className="text-white">Sometimes the darkness feels more honest than the night</div>
-                  <div>
-                  
-                  </div>
-                  <div className="flex justify-between my-4">
-                      <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
-                          <FaRegComment/>
-                          <span className="text-sm">1.5k</span>
-                      </div>
-                      <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
-                          <FiRepeat/>
-                          <span className="text-sm">7.5k</span>
-                      </div>
-                      <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
-                          <FaRegHeart/>
-                          <span className="text-sm">2.5k</span>
-                      </div>
-                      <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
-                          <IoIosStats/>
-                          <span className="text-sm">5k</span>
-                      </div>
-                      <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
-                          <FaRegBookmark size={20}/>
-                      </div>
-                  </div>
+          <div
+            key={comment.id}
+            className="px-4 flex gap-3 border-b border-border"
+          >
+            <Image
+              src={comment.profiles.avatar_url}
+              alt="profile-pic"
+              width={100}
+              height={100}
+              className="w-10 h-10 object-cover rounded-full shrink-0"
+            />
+
+            <div className="w-full">
+              <div className="flex justify-between gap-1 text-sm">
+                <div className="flex gap-1 items-center text-sm">
+                  <span className="text-white font-bold">
+                    {comment.profiles.name}
+                  </span>
+
+                  <span className="text-secondary-text">
+                    @{comment.profiles.username}
+                  </span>
+
+                  <span className="text-secondary-text">
+                    {moment(comment.created_at).fromNow()}
+                  </span>
+                </div>
+
+                <BsThreeDots className="text-secondary-text" />
               </div>
+
+              <div className="text-white">{comment.content}</div>
+
+              <CommentActions
+                creatorId={comment.profiles.id}
+                commentId={comment.id}
+                tweetId={comment.tweet_id}
+              />
             </div>
-        )
+          </div>
+        );
       })}
-      
     </div>
-  )
+  );
 }
