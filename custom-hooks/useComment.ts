@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createComment } from "../services/comments";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createComment, getComments } from "../services/comments";
 
 export const useCreateComment = () => {
   const queryClient = useQueryClient();
@@ -18,5 +18,13 @@ export const useCreateComment = () => {
         queryKey: ["comments", variables.tweetId],
       });
     },
+  });
+};
+
+export const useGetComments = (tweetId: string) => {
+  return useQuery({
+    queryFn: () => getComments(tweetId),
+    queryKey: ["comments", tweetId],
+    enabled: !!tweetId,
   });
 };

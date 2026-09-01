@@ -84,8 +84,8 @@ export default async function Page({ params }: { params: Promise<{ postid: strin
           />
         </div>
       </div>
-      <ReplyPost/>
-      <Comments/>
+      <ReplyPost tweetId={tweet.id}/>
+      <Comments tweetId={tweet.id}/>
     </div>
   );
 }
