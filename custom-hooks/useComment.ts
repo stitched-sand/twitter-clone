@@ -3,6 +3,7 @@ import {
   createComment,
   deleteComment,
   getComments,
+  getCommentsCount,
 } from "../services/comments";
 
 export const useCreateComment = () => {
@@ -34,7 +35,7 @@ export const useGetComments = (tweetId: string) => {
 };
 
 export const useDeleteComment = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({
@@ -45,9 +46,23 @@ export const useDeleteComment = () => {
       commentId: string;
     }) => deleteComment(commentId),
     onSuccess: (data, variables) => {
-        queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["comments", variables.tweetId],
       });
-    }
+      queryClient.invalidateQueries({
+        queryKey: ["comments-count", variables.tweetId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["comments-count", variables.tweetId],
+      });
+    },
+  });
+};
+
+export const useCommentsCount = (tweetId: string) => {
+  return useQuery({
+    queryFn: () => getCommentsCount(tweetId),
+    queryKey: ["comments-count", tweetId],
+    enabled: !!tweetId,
   });
 };

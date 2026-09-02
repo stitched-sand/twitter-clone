@@ -1,46 +1,54 @@
-"use client"
-import React from 'react'
-import { FaRegBookmark, FaRegComment, FaTrash } from 'react-icons/fa6'
-import { FiRepeat } from 'react-icons/fi'
-import { IoIosStats } from 'react-icons/io'
-import { useDeleteTweets } from '../../custom-hooks/useTweet'
-import { useUserSession } from '../../custom-hooks/useUserSession'
-import { useRouter } from 'next/navigation'
+"use client";
+import React from "react";
+import { FaRegBookmark, FaRegComment, FaTrash } from "react-icons/fa6";
+import { FiRepeat } from "react-icons/fi";
+import { IoIosStats } from "react-icons/io";
+import { useDeleteTweets } from "../../custom-hooks/useTweet";
+import { useUserSession } from "../../custom-hooks/useUserSession";
+import { useRouter } from "next/navigation";
+import { useCommentsCount } from "../../custom-hooks/useComment";
 
 type TweetsActionsProp = {
-    creatorId: string;
-    tweetId: string,
-    imagePath: string,
-    isTweetPostViewPage: boolean
-}
+  creatorId: string;
+  tweetId: string;
+  imagePath: string;
+  isTweetPostViewPage: boolean;
+};
 
-export default function TweetActions({creatorId, tweetId, imagePath, isTweetPostViewPage}:TweetActionsProp) {
-    const {mutate} = useDeleteTweets();
+export default function TweetActions({
+  creatorId,
+  tweetId,
+  imagePath,
+  isTweetPostViewPage,
+}: TweetActionsProp) {
+  const { mutate } = useDeleteTweets();
 
-    const{session} = useUserSession();
-    const userId = session?.user.id
-    const router = useRouter();
+  const { session } = useUserSession();
+  const { data:commentsCount } = useCommentsCount(tweetId);
+  const userId = session?.user.id;
+  const router = useRouter();
 
-    const handleDeleteTweet = () => {
-        mutate({
-            tweetId,
-            imagePath:imagePath || undefined
-        }, {
-            onSuccess: () => {
-                if(isTweetPostViewPage){
-                    router.replace("/home");
-                }
-            }
-        })
-
-
-    }
+  const handleDeleteTweet = () => {
+    mutate(
+      {
+        tweetId,
+        imagePath: imagePath || undefined,
+      },
+      {
+        onSuccess: () => {
+          if (isTweetPostViewPage) {
+            router.replace("/home");
+          }
+        },
+      },
+    );
+  };
 
   return (
     <div className="flex justify-between my-4">
       <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
         <FaRegComment />
-        <span className="text-sm">0</span>
+        <span className="text-sm">{commentsCount}</span>
       </div>
       {creatorId === userId ? (
         <button
@@ -55,7 +63,7 @@ export default function TweetActions({creatorId, tweetId, imagePath, isTweetPost
           <span className="text-sm">7.5k</span>
         </div>
       )}
-      
+
       <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
         <IoIosStats />
         <span className="text-sm">5k</span>
@@ -64,5 +72,5 @@ export default function TweetActions({creatorId, tweetId, imagePath, isTweetPost
         <FaRegBookmark size={20} />
       </div>
     </div>
-  )
+  );
 }

@@ -26,18 +26,34 @@ export const getComments = async (tweetId: string) => {
     .eq("tweet_id", tweetId)
     .order("created_at", { ascending: false });
 
-    if (error) {
-  console.log("fetchCommentsError", error.message);
-  return [];
-}
+  if (error) {
+    console.log("fetchCommentsError", error.message);
+    return [];
+  }
 
-    return data ?? [];
+  return data ?? [];
 };
 
-export const deleteComment = async (commentId:string) => {
-    const {error} = await supabase.from("comments").delete().eq("id", commentId);
+export const deleteComment = async (commentId: string) => {
+  const { error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("id", commentId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getCommentsCount = async (tweetId: string) => {
+  const {error, count} = await supabase
+    .from("comments")
+    .select("id", { head: true, count: "exact" })
+    .eq("tweet_id", tweetId);
 
     if(error){
-        throw new Error(error.message);
+        console.log("commentsCountError:", error.message);
     }
-}
+
+    return count ?? 0;
+};
