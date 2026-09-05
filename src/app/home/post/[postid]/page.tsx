@@ -28,6 +28,7 @@ const getTweet = async (id: string) => {
 export default async function Page({ params }: { params: Promise<{ postid: string }> }) {
   const postId = (await params).postid
   const tweet: Tweet = await getTweet(postId);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-3 px-4 py-2">
@@ -79,7 +80,7 @@ export default async function Page({ params }: { params: Promise<{ postid: strin
           <TweetActions
             creatorId={tweet.profiles.id}
             tweetId={tweet.id}
-            imagePath={tweet.image_Path}
+            imagePath={tweet.image_path}
             isTweetPostViewPage={true}
           />
         </div>

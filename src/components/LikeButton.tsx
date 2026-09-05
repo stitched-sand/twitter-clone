@@ -23,7 +23,7 @@ export default function LikeButton({
   const { mutate } = useToggleLike();
 
   const handleLike = () => {
-    if (!session) return;
+    if (!session || !userId) return;
     mutate({
         userId, tweetId, hasLiked: !!hasLiked
     })

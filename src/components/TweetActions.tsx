@@ -11,7 +11,7 @@ import LikeButton from "./LikeButton";
 type TweetActionsProps = {
   creatorId: string;
   tweetId: string;
-  imagePath: string;
+  imagePath: string | null;
   isTweetPostViewPage: boolean;
 };
 export default function TweetActions({

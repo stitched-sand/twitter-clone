@@ -49,7 +49,7 @@ export default function CreatePost() {
     mutate(
       {
         userId: session.user.id,
-        content: post || null,
+        content: post,
         tweetImage: tweetImage || null,
       },
       {

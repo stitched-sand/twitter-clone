@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getLikesCount, getUserLike, toggleLike } from "../services/like";
 
 type ToggleLike = {
-  userId: string | undefined;
+  userId: string;
   tweetId: string;
   hasLiked: boolean;
 };

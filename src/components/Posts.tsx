@@ -83,7 +83,7 @@ export default function Posts() {
               <TweetActions
                 creatorId={tweet.profiles.id}
                 tweetId={tweet.id}
-                imagePath={tweet.image_Path}
+                imagePath={tweet.image_path}
                 isTweetPostViewPage={false}
               />
             </div>

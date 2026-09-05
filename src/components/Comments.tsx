@@ -5,6 +5,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { useGetComments } from "../../custom-hooks/useComment";
 import moment from "moment";
 import CommentActions from "./CommentActions";
+import { Comment } from "../../types/types";
 
 export default function Comments({ tweetId }: { tweetId: string }) {
   const { error, isError, isLoading, data: comments } = useGetComments(tweetId);
