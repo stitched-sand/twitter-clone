@@ -7,6 +7,7 @@ import { useDeleteTweets } from "../../custom-hooks/useTweet";
 import { useUserSession } from "../../custom-hooks/useUserSession";
 import { useRouter } from "next/navigation";
 import { useCommentsCount } from "../../custom-hooks/useComment";
+import LikeButton from "./LikeButton";
 
 type TweetsActionsProp = {
   creatorId: string;
@@ -24,7 +25,7 @@ export default function TweetActions({
   const { mutate } = useDeleteTweets();
 
   const { session } = useUserSession();
-  const { data:commentsCount } = useCommentsCount(tweetId);
+  const { data: commentsCount } = useCommentsCount(tweetId);
   const userId = session?.user.id;
   const router = useRouter();
 
@@ -64,6 +65,7 @@ export default function TweetActions({
         </div>
       )}
 
+    {session && <LikeButton tweetId={tweetId}userId={userId}/>}
       <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
         <IoIosStats />
         <span className="text-sm">5k</span>
