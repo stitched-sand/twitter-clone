@@ -11,7 +11,7 @@ type Profile = {
 
 export const useGetUser = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { session } = useUserSession();
+  const { session, loading:gettingSession } = useUserSession();
   const [loading, setLoading] = useState(true);
   const userId = session ? session.user.id : null;
 
@@ -37,5 +37,5 @@ export const useGetUser = () => {
     fetchProfile()
   }, [userId]);
 
-  return {profile, session, loading}
+  return {profile, session, loading, gettingSession}
 };

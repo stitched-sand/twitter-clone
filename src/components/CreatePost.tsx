@@ -9,6 +9,7 @@ import { RxCross2 } from "react-icons/rx";
 import EmojiPicker, { EmojiClckData, Theme } from "emoji-picker-react";
 import { useGetUser } from "../../custom-hooks/useGetUser";
 import { usePostTweet } from "../../custom-hooks/useTweet";
+import { SpinnerCircularFixed } from "spinners-react";
 
 export default function CreatePost() {
   const [post, setPost] = useState("");
@@ -17,8 +18,8 @@ export default function CreatePost() {
   const [tweetImage, setTweetImage] = useState<null | File>();
   const isDisabled = post.trim() === "" && !imagePreview;
   const fileref = useRef<HTMLInputElement | null>(null);
-  const { loading, session, profile } = useGetUser();
-  const {mutate, isPending} = usePostTweet()
+  const { loading, session, profile, gettingSession } = useGetUser();
+  const { mutate, isPending } = usePostTweet();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,37 +40,50 @@ export default function CreatePost() {
   };
 
   const PostTweet = () => {
-  if (!post.trim() && !tweetImage) {
-    return;
-  }
-
-  if (!session?.user.id) return;
-
-  mutate(
-    {
-      userId: session.user.id,
-      content: post || null,
-      tweetImage: tweetImage || null,
-    },
-    {
-      onSuccess: () => {
-        setPost("");
-        setImagePreview(null);
-        setTweetImage(null);
-      },
-      onError: (error) => {
-        console.log("Failed to post tweet", error.message);
-      },
+    if (!post.trim() && !tweetImage) {
+      return;
     }
-  );
-};
 
+    if (!session?.user.id) return;
+
+    mutate(
+      {
+        userId: session.user.id,
+        content: post || null,
+        tweetImage: tweetImage || null,
+      },
+      {
+        onSuccess: () => {
+          setPost("");
+          setImagePreview(null);
+          setTweetImage(null);
+        },
+        onError: (error) => {
+          console.log("Failed to post tweet", error.message);
+        },
+      },
+    );
+  };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center py-4">
+        <SpinnerCircularFixed size={25} color="#1DA1F2" />
+      </div>
+    );
+  if (gettingSession)
+    return (
+      <div className="flex justify-center items-center py-4">
+        <SpinnerCircularFixed size={25} color="#1DA1F2" />
+      </div>
+    );
   if (!session) return null;
-  if(!profile) return null;
-  if (loading) return <h1 className="text-2xl text-white">Loading</h1>;
+  if (!profile) return null;
 
   return (
-    <div className= {`flex gap-4 p-4 border border-border ${isPending ? "opacity-30" : ""}`}>
+    <div
+      className={`flex gap-4 p-4 border border-border ${isPending ? "opacity-30" : ""}`}
+    >
       {profile?.avatar_url && (
         <Image
           src={profile.avatar_url}
@@ -129,7 +143,10 @@ export default function CreatePost() {
               Post
             </button>
           ) : (
-            <button onClick= {PostTweet} className="text-black bg-white py-2 px-5 font-semibold cursor-pointer rounded-full">
+            <button
+              onClick={PostTweet}
+              className="text-black bg-white py-2 px-5 font-semibold cursor-pointer rounded-full"
+            >
               Post
             </button>
           )}
