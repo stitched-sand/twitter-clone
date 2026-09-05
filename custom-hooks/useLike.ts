@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUserLike, toggleLike } from "../services/like";
+import { getLikesCount, getUserLike, toggleLike } from "../services/like";
 
 type ToggleLike = {
   userId: string | undefined;
@@ -14,6 +14,7 @@ export const useToggleLike = () => {
       toggleLike({ userId, tweetId, hasLiked }),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["likes", variables.tweetId] });
+      queryClient.invalidateQueries({ queryKey: ["likes-count", variables.tweetId] });
     },
   });
 };
@@ -27,3 +28,11 @@ export const useUserLike = (userId: string | undefined, tweetId: string) => {
     enabled: !!tweetId && !!userId,
   });
 };
+
+export const useLikesCount = (tweetId:string) => {
+    return useQuery({
+        queryKey:["likes-count", tweetId],
+        queryFn: () => getLikesCount(tweetId),
+        enabled: !!tweetId
+    })
+}

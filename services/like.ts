@@ -29,13 +29,25 @@ export const getUserLike = async (
   userId: string | undefined,
   tweetId: string,
 ) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from("likes")
     .select("*")
     .eq("user_id", userId)
-    .eq("tweet_id", tweetId).maybeSingle();
+    .eq("tweet_id", tweetId)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+
+  return !!data;
+};
+
+export const getLikesCount = async (tweetId:string) => {
+  const {count, error} = await supabase
+    .from("likes")
+    .select("id", { head: true, count: "exact" })
+    .eq("tweet_id", tweetId);
 
     if (error) throw new Error(error.message);
 
-    return !!data
+    return count ?? 0;
 };
