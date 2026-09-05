@@ -8,27 +8,23 @@ import { useUserSession } from "../../custom-hooks/useUserSession";
 import { useRouter } from "next/navigation";
 import { useCommentsCount } from "../../custom-hooks/useComment";
 import LikeButton from "./LikeButton";
-
-type TweetsActionsProp = {
+type TweetActionsProps = {
   creatorId: string;
   tweetId: string;
   imagePath: string;
   isTweetPostViewPage: boolean;
 };
-
 export default function TweetActions({
   creatorId,
   tweetId,
   imagePath,
   isTweetPostViewPage,
-}: TweetActionsProp) {
+}: TweetActionsProps) {
   const { mutate } = useDeleteTweets();
-
   const { session } = useUserSession();
   const { data: commentsCount } = useCommentsCount(tweetId);
   const userId = session?.user.id;
   const router = useRouter();
-
   const handleDeleteTweet = () => {
     mutate(
       {
@@ -44,7 +40,6 @@ export default function TweetActions({
       },
     );
   };
-
   return (
     <div className="flex justify-between my-4">
       <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
@@ -64,8 +59,11 @@ export default function TweetActions({
           <span className="text-sm">7.5k</span>
         </div>
       )}
-
-    <LikeButton tweetId={tweetId} userId={userId} session={session}/>
+      <LikeButton
+        tweetId={tweetId}
+        userId={userId}
+        session={session}
+      />
       <div className="text-secondary-text flex items-center gap-1 hover:text-blue-400 cursor-pointer">
         <IoIosStats />
         <span className="text-sm">5k</span>

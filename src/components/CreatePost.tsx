@@ -6,7 +6,7 @@ import { FaRegFaceSmile } from "react-icons/fa6";
 import { IoLocationOutline } from "react-icons/io5";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
-import EmojiPicker, { EmojiClckData, Theme } from "emoji-picker-react";
+import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { useGetUser } from "../../custom-hooks/useGetUser";
 import { usePostTweet } from "../../custom-hooks/useTweet";
 import { SpinnerCircularFixed } from "spinners-react";

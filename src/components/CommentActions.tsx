@@ -6,7 +6,6 @@ import {
   FaRegHeart,
   FaTrash,
 } from "react-icons/fa6";
-import { FiRepeat } from "react-icons/fi";
 import { IoIosStats } from "react-icons/io";
 import { useUserSession } from "../../custom-hooks/useUserSession";
 import { useDeleteComment } from "../../custom-hooks/useComment";

@@ -38,7 +38,7 @@ const [email, setEmail] = useState("");
       }
     }
   )
-  }, []);
+  }, [router]);
 
   return (
     <div className="h-screen flex items-center justify-center">

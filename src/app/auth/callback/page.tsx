@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../../lib/SupabaseClient";
 import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js";
+
 
 export default function Page() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function Page() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
-  const [user, setUser] = useState<null | User>(null);
+ 
   const [isChecking, setIsChecking] = useState(true);
 
   const setupUserProfile = async (e: React.FormEvent) => {
@@ -85,7 +85,7 @@ export default function Page() {
         return;
       }
 
-      setUser(user);
+     
 
       // Check if user already has a profile
       const { data: profile, error: profileError } = await supabase

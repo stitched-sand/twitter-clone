@@ -39,7 +39,6 @@ export const useDeleteComment = () => {
 
   return useMutation({
     mutationFn: ({
-      tweetId,
       commentId,
     }: {
       tweetId: string;
@@ -52,9 +51,7 @@ export const useDeleteComment = () => {
       queryClient.invalidateQueries({
         queryKey: ["comments-count", variables.tweetId],
       });
-      queryClient.invalidateQueries({
-        queryKey: ["comments-count", variables.tweetId],
-      });
+      
     },
   });
 };

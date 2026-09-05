@@ -2,9 +2,6 @@
 import Image from "next/image";
 import React from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { FaRegBookmark, FaRegComment, FaRegHeart } from "react-icons/fa6";
-import { FiRepeat } from "react-icons/fi";
-import { IoIosStats } from "react-icons/io";
 import { useGetComments } from "../../custom-hooks/useComment";
 import moment from "moment";
 import CommentActions from "./CommentActions";

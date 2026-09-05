@@ -1,7 +1,6 @@
 import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Image from "next/image";
-800;
 
 export default function RightSidebar() {
   return (
